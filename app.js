@@ -13,8 +13,8 @@ const yargOptions = {
 
 const argv = yargs.options(yargOptions).help().argv;
 
-geocode.geocodeAddress(argv.address, (errorMessage, results) => {
-  errorMessage ? console.log(errorMessage) : console.log(JSON.stringify(results, undefined, 2));
+geocode.geocodeAddress(argv.address, (error, results) => {
+  console.log((error ? error : JSON.stringify(results, undefined, 2)))
 });
 
 
