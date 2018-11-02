@@ -3,8 +3,8 @@ const key = process.env.KEY;
 
 const geocodeAddress = (address, callback) => {
   const encoded = encodeURIComponent(address);
-  const locationUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${encoded}`;
-  const locationObj = { url: locationUrl, json: true };
+  const url = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&location=${encoded}`;
+  const locationObj = { url , json: true };
 
   request(locationObj, (err, resp, body) => {
     if (!body.results || err) {
@@ -18,7 +18,7 @@ const geocodeAddress = (address, callback) => {
       const { street, latLng } = locations[0];
 
        callback(undefined, {
-        address: (street !== "" ? street : "not found"),
+        address: (street !== "" ? street : address),
         latitude: latLng.lat,
         longitude: latLng.lng,
       })
