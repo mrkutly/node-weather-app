@@ -24,17 +24,19 @@ const locationUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=${key}&
 const locationObj = { url: locationUrl, json: true };
 //
 const requestCB = (err, resp, body) => {
-  if (err) {
-    console.log(err);
-    return;
+  if (!body.results || err) {
+    console.log(`error: unable to connect to mapquest servers`);
+  } else if (!body.results[0].locations[0].latLng) {
+    console.log(`unable to find latitude and longitude`);
+  } else {
+    const { locations } = body.results[0];
+    const { street, latLng } = locations[0];
+
+    console.log(JSON.stringify(`Address: ${street !== "" ? street : "not found"}`, undefined, 2));
+    console.log(JSON.stringify(`Latitude: ${latLng.lat}`, undefined, 2));
+    console.log(JSON.stringify(`Longitude: ${latLng.lng}`, undefined, 2));
   }
 
-  const { locations } = body.results[0];
-  const { street, latLng } = locations[0];
-
-  console.log(JSON.stringify(`Address: ${street}`, undefined, 2));
-  console.log(JSON.stringify(`Latitude: ${latLng.lat}`, undefined, 2));
-  console.log(JSON.stringify(`Longitude: ${latLng.lng}`, undefined, 2));
 }
 
 request(locationObj, requestCB);
